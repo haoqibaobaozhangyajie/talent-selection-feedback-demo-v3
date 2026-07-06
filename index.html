@@ -808,7 +808,8 @@ input {
 }
 
 .score-strip,
-.compare-grid {
+.compare-grid,
+.compare-feedback {
   display: grid;
   grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
   gap: 14px;
@@ -816,6 +817,7 @@ input {
 
 .score-card,
 .person-column,
+.person-feedback-card,
 .rank-box {
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -848,6 +850,31 @@ input {
 .person-column h3 {
   margin-bottom: 14px;
   color: #20243a;
+}
+
+.compare-feedback {
+  align-items: start;
+}
+
+.person-feedback-card {
+  padding: 16px;
+  background: #fbfcff;
+}
+
+.person-feedback-card h3 {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.person-feedback-card p {
+  margin-bottom: 12px;
+  color: #7d8498;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.person-feedback-card .other-reason {
+  min-height: 52px;
 }
 
 .metric {
@@ -947,7 +974,8 @@ input {
   }
 
   .score-strip,
-  .compare-grid {
+  .compare-grid,
+  .compare-feedback {
     grid-template-columns: 1fr;
   }
 }
@@ -1107,6 +1135,7 @@ input {
         </div>
         <div class="score-strip" id="scoreStrip"></div>
         <div class="compare-grid" id="compareGrid"></div>
+        <div class="compare-feedback hidden" id="compareFeedback"></div>
         <div class="rank-box">
           <h3>推荐排序依据</h3>
           <p id="rankReason"></p>
@@ -1330,6 +1359,7 @@ const otherReason = document.getElementById("otherReason");
 const comparePanel = document.getElementById("comparePanel");
 const scoreStrip = document.getElementById("scoreStrip");
 const compareGrid = document.getElementById("compareGrid");
+const compareFeedback = document.getElementById("compareFeedback");
 const rankReason = document.getElementById("rankReason");
 const calculationStatus = document.getElementById("calculationStatus");
 const feedbackReasons = [
@@ -1342,6 +1372,7 @@ const feedbackReasons = [
   "其他说明"
 ];
 const selectedReasons = new Set();
+const compareReasons = new Map();
 let calculationTimer = null;
 let calculationTimeout = null;
 
@@ -1416,16 +1447,20 @@ function renderSampleRow() {
 
 function renderReasonOptions() {
   reasonOptions.innerHTML = "";
+  renderReasonButtons(reasonOptions, selectedReasons, toggleReason);
+  otherReason.classList.toggle("hidden", !selectedReasons.has("其他说明"));
+}
+
+function renderReasonButtons(container, reasonSet, onToggle) {
   feedbackReasons.forEach((reason) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "reason-chip";
     button.textContent = reason;
-    if (selectedReasons.has(reason)) button.classList.add("selected");
-    button.addEventListener("click", () => toggleReason(reason));
-    reasonOptions.appendChild(button);
+    if (reasonSet.has(reason)) button.classList.add("selected");
+    button.addEventListener("click", () => onToggle(reason));
+    container.appendChild(button);
   });
-  otherReason.classList.toggle("hidden", !selectedReasons.has("其他说明"));
 }
 
 function toggleReason(reason) {
@@ -1453,11 +1488,11 @@ function renderSelectedState() {
   selectedCount.textContent = people.length;
   selectedNames.textContent = people.length ? people.map((person) => person.name).join("、") : "暂未选择人员";
   compareSelectedBtn.classList.toggle("hidden", people.length < 2);
-  reasonPanel.classList.toggle("hidden", people.length === 0);
+  reasonPanel.classList.toggle("hidden", people.length !== 1);
   compareSelectedBtn.disabled = false;
   compareSelectedBtn.textContent = "计算岗位匹配并对比";
   calculationStatus.classList.add("hidden");
-  if (people.length === 0) {
+  if (people.length !== 1) {
     selectedReasons.clear();
     otherReason.value = "";
     renderReasonOptions();
@@ -1488,13 +1523,16 @@ function openFeedbackModal() {
   setTimeout(() => searchInput.focus(), 80);
 }
 
-function openComparePanel(people = [...selected.values()]) {
+function openComparePanel(people = [...selected.values()], showFeedback = false) {
   const compared = people.length >= 2 ? people : candidates.slice(0, 2);
   comparePanel.classList.remove("hidden");
   scoreStrip.style.setProperty("--cols", compared.length);
   compareGrid.style.setProperty("--cols", compared.length);
+  compareFeedback.style.setProperty("--cols", compared.length);
   scoreStrip.innerHTML = "";
   compareGrid.innerHTML = "";
+  compareFeedback.innerHTML = "";
+  compareFeedback.classList.toggle("hidden", !showFeedback);
 
   compared.forEach((person, index) => {
     const score = document.createElement("div");
@@ -1527,8 +1565,45 @@ function openComparePanel(people = [...selected.values()]) {
     compareGrid.appendChild(column);
   });
 
+  if (showFeedback) renderCompareFeedback(compared);
+
   const ranked = [...compared].sort((a, b) => b.score - a.score);
   rankReason.textContent = `当前排序为 ${ranked.map((person) => `${person.name}（${person.score}分）`).join(" > ")}。排序主要参考岗位匹配总分、岗位经历贴合度、营销培训相关标签命中情况和现任岗位可迁移性。`;
+}
+
+function renderCompareFeedback(people) {
+  compareFeedback.innerHTML = "";
+  people.forEach((person) => {
+    if (!compareReasons.has(person.id)) {
+      compareReasons.set(person.id, { reasons: new Set(), other: "" });
+    }
+    const state = compareReasons.get(person.id);
+    const card = document.createElement("article");
+    card.className = "person-feedback-card";
+    card.innerHTML = `
+      <h3>${person.name}的反馈</h3>
+      <p>与系统推荐人员相比，这个人为什么更合适？ <span>选填</span></p>
+      <div class="reason-options"></div>
+      <textarea class="other-reason hidden" placeholder="请输入其他说明，例如：长期负责同类项目、熟悉目标团队等"></textarea>
+    `;
+    const options = card.querySelector(".reason-options");
+    const textarea = card.querySelector("textarea");
+    renderReasonButtons(options, state.reasons, (reason) => {
+      if (state.reasons.has(reason)) {
+        state.reasons.delete(reason);
+      } else {
+        state.reasons.add(reason);
+      }
+      if (!state.reasons.has("其他说明")) state.other = "";
+      renderCompareFeedback(people);
+    });
+    textarea.classList.toggle("hidden", !state.reasons.has("其他说明"));
+    textarea.value = state.other;
+    textarea.addEventListener("input", () => {
+      state.other = textarea.value;
+    });
+    compareFeedback.appendChild(card);
+  });
 }
 
 function startCompareCalculation() {
@@ -1555,13 +1630,14 @@ function startCompareCalculation() {
     compareSelectedBtn.textContent = "计算岗位匹配并对比";
     calculationStatus.classList.add("hidden");
     calculationTimeout = null;
-    openComparePanel(people);
+    compareReasons.clear();
+    openComparePanel(people, true);
   }, 10000);
 }
 
 document.getElementById("openDrawerBtn").addEventListener("click", () => drawer.classList.add("open"));
-document.getElementById("quickCompareBtn").addEventListener("click", () => openComparePanel(candidates.slice(0, 2)));
-document.getElementById("drawerCompareBtn").addEventListener("click", () => openComparePanel(candidates.slice(0, 3)));
+document.getElementById("quickCompareBtn").addEventListener("click", () => openComparePanel(candidates.slice(0, 2), false));
+document.getElementById("drawerCompareBtn").addEventListener("click", () => openComparePanel(candidates.slice(0, 3), false));
 document.getElementById("closeDrawerBtn").addEventListener("click", () => drawer.classList.remove("open"));
 document.getElementById("notHelpfulBtn").addEventListener("click", openFeedbackModal);
 document.getElementById("closeModalBtn").addEventListener("click", () => {
