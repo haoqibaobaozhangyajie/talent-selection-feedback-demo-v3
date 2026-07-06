@@ -877,6 +877,36 @@ input {
   min-height: 52px;
 }
 
+.prefer-button {
+  width: 100%;
+  border: 1px solid #dfe4ff;
+  border-radius: 10px;
+  padding: 11px 12px;
+  color: #655cf5;
+  background: #fff;
+  font-weight: 800;
+  text-align: left;
+}
+
+.prefer-button.selected {
+  border-color: #7768ff;
+  color: #fff;
+  background: var(--purple);
+}
+
+.feedback-detail {
+  margin-top: 12px;
+}
+
+.other-label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  color: #626b83;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .metric {
   margin: 13px 0;
 }
@@ -1575,29 +1605,52 @@ function renderCompareFeedback(people) {
   compareFeedback.innerHTML = "";
   people.forEach((person) => {
     if (!compareReasons.has(person.id)) {
-      compareReasons.set(person.id, { reasons: new Set(), other: "" });
+      compareReasons.set(person.id, { preferred: false, reasons: new Set(), other: "" });
     }
     const state = compareReasons.get(person.id);
     const card = document.createElement("article");
     card.className = "person-feedback-card";
     card.innerHTML = `
       <h3>${person.name}的反馈</h3>
-      <p>与系统推荐人员相比，这个人为什么更合适？ <span>选填</span></p>
-      <div class="reason-options"></div>
-      <textarea class="other-reason hidden" placeholder="请输入其他说明，例如：长期负责同类项目、熟悉目标团队等"></textarea>
+      <p>与系统推荐人员相比，这个人为什么更合适？</p>
+      <button type="button" class="prefer-button">我认为他更合适</button>
+      <div class="feedback-detail hidden">
+        <div class="reason-options"></div>
+        <label class="other-label">其他</label>
+        <textarea class="other-reason" placeholder="请补充领导的具体判断，例如：更熟悉目标团队、长期负责同类项目、近期表现更突出等"></textarea>
+      </div>
     `;
+    const preferButton = card.querySelector(".prefer-button");
+    const detail = card.querySelector(".feedback-detail");
     const options = card.querySelector(".reason-options");
     const textarea = card.querySelector("textarea");
-    renderReasonButtons(options, state.reasons, (reason) => {
-      if (state.reasons.has(reason)) {
-        state.reasons.delete(reason);
-      } else {
-        state.reasons.add(reason);
+    preferButton.classList.toggle("selected", state.preferred);
+    preferButton.textContent = state.preferred ? "已选择：我认为他更合适" : "我认为他更合适";
+    detail.classList.toggle("hidden", !state.preferred);
+    preferButton.addEventListener("click", () => {
+      state.preferred = !state.preferred;
+      if (!state.preferred) {
+        state.reasons.clear();
+        state.other = "";
       }
-      if (!state.reasons.has("其他说明")) state.other = "";
       renderCompareFeedback(people);
     });
-    textarea.classList.toggle("hidden", !state.reasons.has("其他说明"));
+    feedbackReasons.filter((reason) => reason !== "其他说明").forEach((reason) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "reason-chip";
+      button.textContent = reason;
+      if (state.reasons.has(reason)) button.classList.add("selected");
+      button.addEventListener("click", () => {
+        if (state.reasons.has(reason)) {
+          state.reasons.delete(reason);
+        } else {
+          state.reasons.add(reason);
+        }
+        renderCompareFeedback(people);
+      });
+      options.appendChild(button);
+    });
     textarea.value = state.other;
     textarea.addEventListener("input", () => {
       state.other = textarea.value;
