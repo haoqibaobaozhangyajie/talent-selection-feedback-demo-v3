@@ -1373,6 +1373,7 @@ const searchCandidates = [
 ];
 
 const selected = new Map();
+const targetRole = "示例总部-业务支持部-培训管理处-处负责人";
 const recommendationList = document.getElementById("recommendationList");
 const drawer = document.getElementById("drawer");
 const drawerList = document.getElementById("drawerList");
@@ -1571,7 +1572,7 @@ function openComparePanel(people = [...selected.values()], showFeedback = false)
       <strong>${index + 1}. ${person.name}</strong>
       <b>${person.score}</b>
       <span class="tag">已生成岗位匹配</span>
-      <p>${person.dept}</p>
+      <p>${targetRole}</p>
     `;
     scoreStrip.appendChild(score);
 
