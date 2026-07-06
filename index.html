@@ -1663,7 +1663,7 @@ function startCompareCalculation() {
   const people = [...selected.values()];
   if (people.length < 2) return;
 
-  let remainingSeconds = 10;
+  let remainingSeconds = 5;
   compareSelectedBtn.disabled = true;
   compareSelectedBtn.textContent = "分析中...";
   calculationStatus.textContent = "正在调用岗位匹配模型，生成匹配分、优势短板和标签差异，请稍候...";
@@ -1685,7 +1685,7 @@ function startCompareCalculation() {
     calculationTimeout = null;
     compareReasons.clear();
     openComparePanel(people, true);
-  }, 10000);
+  }, 5000);
 }
 
 document.getElementById("openDrawerBtn").addEventListener("click", () => drawer.classList.add("open"));
