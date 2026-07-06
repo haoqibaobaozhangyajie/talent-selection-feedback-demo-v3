@@ -705,10 +705,10 @@ input {
 .reason-chip {
   border: 1px solid #e2e6f3;
   border-radius: 18px;
-  padding: 7px 10px;
+  padding: 8px 12px;
   color: #5f6680;
   background: #fff;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -725,6 +725,8 @@ input {
   padding: 10px 12px;
   border: 1px solid #dfe4ef;
   border-radius: 8px;
+  color: #31374d;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -850,6 +852,7 @@ input {
 .person-column h3 {
   margin-bottom: 14px;
   color: #20243a;
+  font-size: 22px;
 }
 
 .compare-feedback {
@@ -874,16 +877,17 @@ input {
 }
 
 .person-feedback-card .other-reason {
-  min-height: 52px;
+  min-height: 68px;
 }
 
 .prefer-button {
   width: 100%;
   border: 1px solid #dfe4ff;
   border-radius: 10px;
-  padding: 11px 12px;
+  padding: 13px 14px;
   color: #655cf5;
   background: #fff;
+  font-size: 17px;
   font-weight: 800;
   text-align: left;
 }
@@ -903,7 +907,7 @@ input {
   margin-top: 12px;
   margin-bottom: 6px;
   color: #626b83;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 800;
 }
 
@@ -915,14 +919,14 @@ input {
   display: block;
   margin-bottom: 7px;
   color: #6f7688;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 800;
 }
 
 .metric p {
   color: #31374d;
   line-height: 1.55;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .tags {
@@ -951,6 +955,7 @@ input {
 .rank-box p {
   color: #596176;
   line-height: 1.6;
+  font-size: 15px;
 }
 
 @media (max-width: 1100px) {
@@ -1010,7 +1015,7 @@ input {
   }
 }
 
-    </style>
+</style>
   </head>
   <body>
     <div class="app-shell">
@@ -1029,11 +1034,11 @@ input {
           <button>帮我对比孙雅雯和赵鹏的优劣势</button>
           <h4>2026-07-02</h4>
           <button>帮我查找重点高校毕业的人员</button>
-          <button>考察寿险一把手</button>
-          <button>产险总公司董事会办公室/企划...</button>
+          <button>考察示例一把手</button>
+          <button>示例财险总公司董事会办公室/企划...</button>
           <h4>2026-06-29</h4>
           <button>以人找岗</button>
-          <button>查询演示用户的本科毕业院校</button>
+          <button>查询王哲的本科毕业院校</button>
           <button>帮我找张三能胜任的岗位</button>
         </div>
         <div class="user-card">
@@ -1124,9 +1129,9 @@ input {
             </div>
           </div>
           <div class="search-panel">
-            <label for="searchInput">按工号或姓名搜索人员</label>
+            <label for="searchInput">按工号搜索人员</label>
             <div class="search-row">
-              <input id="searchInput" type="search" placeholder="例如：周明、A10237、赵倩" />
+              <input id="searchInput" type="search" placeholder="例如：A10237、B21846、D41782" />
               <button id="searchBtn">搜索</button>
             </div>
             <div class="sample-row" id="sampleRow"></div>
@@ -1146,10 +1151,10 @@ input {
               <span>选填</span>
             </div>
             <div class="reason-options" id="reasonOptions"></div>
-            <textarea id="otherReason" class="other-reason hidden" placeholder="请输入其他说明，例如：长期负责同类项目、熟悉目标团队等"></textarea>
+            <textarea id="otherReason" class="other-reason" placeholder="相较于硬性条件，您认为他比其他硬性条件更为符合的候选人更适合这个岗位的地方是?例如 更熟悉团队目标，长期负责同类项目等。"></textarea>
           </div>
           <div class="calculation-status hidden" id="calculationStatus">
-            正在基于当前岗位生成匹配分、优势短板和标签差异...
+            正在基于当前岗位生成匹配分、优势短板和排序依据...
           </div>
           <button class="confirm-btn" id="confirmFeedbackBtn">确定反馈</button>
         </div>
@@ -1160,7 +1165,7 @@ input {
           <button class="icon-btn" id="closeCompareBtn">×</button>
           <div>
             <h2>候选人对比</h2>
-            <p>已基于当前岗位补跑所选人员的匹配数据，展示分数、优势、短板、标签差异和排序依据。</p>
+            <p>已基于当前岗位补跑所选人员的匹配数据，展示分数、优势、短板和排序依据。</p>
           </div>
         </div>
         <div class="score-strip" id="scoreStrip"></div>
@@ -1197,14 +1202,14 @@ const candidates = [
     age: 52,
     level: "S15B",
     joined: "2020-11-10加入示例集团",
-    dept: "示例公司/示例浙江中心支公司",
+    dept: "示例公司/示例浙江绍兴中心支公司",
     title: "总经理室负责人",
     score: 89,
     status: "平调",
     avatar: "刘",
     strengths: "一线机构经营管理经验强，带团队和结果交付稳定。",
     risks: "总部营销培训专项经历不如陈明远直接，需关注从经营管理到专业支持岗位的适配。",
-    tags: ["机构经营", "团队管理", "寿险", "负责人"],
+    tags: ["机构经营", "团队管理", "示例", "负责人"],
     reason: "综合管理能力突出，但专业场景贴合度略低。"
   },
   {
@@ -1214,7 +1219,7 @@ const candidates = [
     level: "U12",
     joined: "2008-07-01加入示例集团",
     dept: "示例公司/示例重庆分公司/阳刚业务部",
-    title: "团体业务部部门负责人",
+    title: "职团业务部部门负责人",
     score: 85,
     status: "平调",
     avatar: "孙",
@@ -1229,7 +1234,7 @@ const candidates = [
     age: 46,
     level: "U12",
     joined: "2011-03-09加入示例集团",
-    dept: "示例公司/示例辽宁中心支公司",
+    dept: "示例公司/示例辽宁盘锦中心支公司",
     title: "总经理室负责人",
     score: 82,
     status: "平调",
@@ -1245,14 +1250,14 @@ const candidates = [
     age: 45,
     level: "U14",
     joined: "2014-02-24加入示例集团",
-    dept: "示例公司/示例河南中心支公司",
+    dept: "示例公司/示例河南安阳中心支公司",
     title: "总经理室负责人",
     score: 82,
     status: "平调",
     avatar: "何",
     strengths: "机构经营稳定，具备中后台协同经验。",
     risks: "营销骨干培训的直接项目证据不足。",
-    tags: ["机构管理", "协同推进", "寿险"],
+    tags: ["机构管理", "协同推进", "示例"],
     reason: "基础管理能力匹配，专业匹配证据偏弱。"
   },
   {
@@ -1261,7 +1266,7 @@ const candidates = [
     age: 38,
     level: "U13",
     joined: "2019-05-13加入示例集团",
-    dept: "示例公司/示例广西中心支公司",
+    dept: "示例公司/示例广西柳州中心支公司",
     title: "总经理室负责人",
     score: 81,
     status: "平调",
@@ -1282,11 +1287,11 @@ const searchCandidates = [
     joined: "2022-03-18加入示例集团",
     dept: "示例公司/示例江苏分公司/业务发展部",
     title: "业务发展部部门负责人",
-    score: 88,
+    score: 52,
     status: "平调",
     avatar: "周",
     strengths: "一线业务推动经验较强，熟悉队伍经营节奏，对培训落地场景理解较好。",
-    risks: "总部岗位经历不足，需要进一步验证跨部门协同和制度化输出能力。",
+    risks: "学历未达到岗位要求，总部岗位经历不足；需要进一步验证跨部门协同和制度化输出能力。",
     tags: ["业务推动", "队伍经营", "培训落地", "部门负责人"],
     reason: "业务场景贴近度较高，适合作为非推荐名单外的补充候选。"
   },
@@ -1298,11 +1303,11 @@ const searchCandidates = [
     joined: "2021-06-09加入示例集团",
     dept: "示例公司/示例山东分公司/培训管理部",
     title: "培训管理部负责人",
-    score: 91,
+    score: 56,
     status: "平调",
     avatar: "赵",
     strengths: "培训管理经验直接，课程体系、骨干培养和项目推进能力与目标岗位高度相关。",
-    risks: "当前主要在分公司场景，总部复杂项目统筹经验需要补充判断。",
+    risks: "年龄与培训管理处岗位胜任力要求偏大，学历未达到岗位要求；当前主要在分公司场景，总部复杂项目统筹经验需要补充判断。",
     tags: ["培训管理", "骨干培养", "项目推进", "课程体系"],
     reason: "专业标签命中最集中，岗位匹配分在手动候选人中最高。"
   },
@@ -1312,13 +1317,13 @@ const searchCandidates = [
     age: 36,
     level: "U11",
     joined: "2020-04-22加入示例集团",
-    dept: "示例公司/示例河北分公司/个险渠道部",
-    title: "个险渠道部经理",
-    score: 84,
+    dept: "示例公司/示例河北分公司/渠道管理部",
+    title: "渠道管理部经理",
+    score: 49,
     status: "平调",
     avatar: "李",
     strengths: "个险渠道经验扎实，熟悉基层队伍需求，反馈敏感度较高。",
-    risks: "管理层级和总部培训项目经验相对不足，短期胜任需要辅导。",
+    risks: "任职层级低于处负责人岗位要求，学历未达到岗位要求；管理层级和总部培训项目经验相对不足，短期胜任需要辅导。",
     tags: ["个险渠道", "基层经营", "业务反馈", "成长性"],
     reason: "条线贴合，但岗位层级和项目经验略弱。"
   },
@@ -1330,11 +1335,11 @@ const searchCandidates = [
     joined: "2019-09-16加入示例集团",
     dept: "示例公司/示例安徽分公司/人力发展部",
     title: "人力发展部负责人",
-    score: 86,
+    score: 53,
     status: "平调",
     avatar: "王",
     strengths: "人才培养、干部发展和培训资源整合经验较好。",
-    risks: "业务条线深度不如个险和营销培训背景候选人，需要关注业务理解。",
+    risks: "学历未达到岗位要求，培训管理处直接经历不足；业务条线深度不如个险和营销培训背景候选人，需要关注业务理解。",
     tags: ["人才培养", "干部发展", "资源整合", "培训项目"],
     reason: "培养体系能力可迁移，业务条线匹配度中等。"
   },
@@ -1346,11 +1351,11 @@ const searchCandidates = [
     joined: "2017-05-12加入示例集团",
     dept: "示例公司/示例湖北分公司/总经理室",
     title: "总经理室成员",
-    score: 83,
+    score: 47,
     status: "平调",
     avatar: "韩",
     strengths: "综合管理和经营判断较强，能从机构视角理解岗位需求。",
-    risks: "营销培训专业标签较少，进入专业支持岗位后磨合成本偏高。",
+    risks: "年龄与培训管理处岗位胜任力要求偏大，学历未达到岗位要求；营销培训专业经历较少，进入专业支持岗位后磨合成本偏高。",
     tags: ["综合管理", "机构经营", "统筹协调"],
     reason: "管理能力强，但专业匹配证据不够集中。"
   },
@@ -1362,11 +1367,11 @@ const searchCandidates = [
     joined: "2023-01-05加入示例集团",
     dept: "示例公司/示例福建分公司/营销企划部",
     title: "营销企划岗",
-    score: 79,
+    score: 44,
     status: "平调",
     avatar: "张",
     strengths: "营销企划思路活跃，对活动设计和数据跟踪较敏感。",
-    risks: "管理经验和岗位层级不足，暂不适合直接作为处负责人首选。",
+    risks: "任职层级低于处负责人岗位要求，学历未达到岗位要求；管理经验和岗位层级不足，暂不适合直接作为处负责人首选。",
     tags: ["营销企划", "活动设计", "数据跟踪", "潜力"],
     reason: "可作为潜力观察对象，但当前胜任度低于其他候选。"
   }
@@ -1399,13 +1404,14 @@ const feedbackReasons = [
   "任职年限更符合",
   "专业领域更匹配",
   "有关键项目/产品经验",
-  "所在机构/层级更匹配",
-  "其他说明"
+  "所在机构/层级更匹配"
 ];
 const selectedReasons = new Set();
 const compareReasons = new Map();
+const feedbackOtherPlaceholder = "相较于硬性条件，您认为他比其他硬性条件更为符合的候选人更适合这个岗位的地方是?例如 更熟悉团队目标，长期负责同类项目等。";
 let calculationTimer = null;
 let calculationTimeout = null;
+let activeCompareFeedbackId = null;
 
 function candidateCard(person, withSelect = false, showScore = true) {
   const article = document.createElement("article");
@@ -1451,11 +1457,7 @@ function renderDrawer() {
 function renderSearchResults() {
   const keyword = searchInput.value.trim().toLowerCase();
   const filtered = searchCandidates.filter((person) => {
-    return (
-      !keyword ||
-      person.name.toLowerCase().includes(keyword) ||
-      person.id.toLowerCase().includes(keyword)
-    );
+    return !keyword || person.id.toLowerCase().includes(keyword);
   });
 
   searchResults.innerHTML = "";
@@ -1469,7 +1471,7 @@ function renderSampleRow() {
     button.type = "button";
     button.textContent = `${person.name} ${person.id}`;
     button.addEventListener("click", () => {
-      searchInput.value = person.name;
+      searchInput.value = person.id;
       renderSearchResults();
     });
     sampleRow.appendChild(button);
@@ -1478,19 +1480,14 @@ function renderSampleRow() {
 
 function renderReasonOptions() {
   reasonOptions.innerHTML = "";
-  renderReasonButtons(reasonOptions, selectedReasons, toggleReason);
-  otherReason.classList.toggle("hidden", !selectedReasons.has("其他说明"));
-}
-
-function renderReasonButtons(container, reasonSet, onToggle) {
   feedbackReasons.forEach((reason) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "reason-chip";
     button.textContent = reason;
-    if (reasonSet.has(reason)) button.classList.add("selected");
-    button.addEventListener("click", () => onToggle(reason));
-    container.appendChild(button);
+    if (selectedReasons.has(reason)) button.classList.add("selected");
+    button.addEventListener("click", () => toggleReason(reason));
+    reasonOptions.appendChild(button);
   });
 }
 
@@ -1500,7 +1497,6 @@ function toggleReason(reason) {
   } else {
     selectedReasons.add(reason);
   }
-  if (!selectedReasons.has("其他说明")) otherReason.value = "";
   renderReasonOptions();
 }
 
@@ -1556,6 +1552,7 @@ function openFeedbackModal() {
 
 function openComparePanel(people = [...selected.values()], showFeedback = false) {
   const compared = people.length >= 2 ? people : candidates.slice(0, 2);
+  if (!showFeedback) activeCompareFeedbackId = null;
   comparePanel.classList.remove("hidden");
   scoreStrip.style.setProperty("--cols", compared.length);
   compareGrid.style.setProperty("--cols", compared.length);
@@ -1588,10 +1585,6 @@ function openComparePanel(people = [...selected.values()], showFeedback = false)
         <label>主要短板</label>
         <p>${person.risks}</p>
       </div>
-      <div class="metric">
-        <label>关键标签差异</label>
-        <div class="tags">${person.tags.map((tag) => `<span>${tag}</span>`).join("")}</div>
-      </div>
     `;
     compareGrid.appendChild(column);
   });
@@ -1599,16 +1592,20 @@ function openComparePanel(people = [...selected.values()], showFeedback = false)
   if (showFeedback) renderCompareFeedback(compared);
 
   const ranked = [...compared].sort((a, b) => b.score - a.score);
-  rankReason.textContent = `当前排序为 ${ranked.map((person) => `${person.name}（${person.score}分）`).join(" > ")}。排序主要参考岗位匹配总分、岗位经历贴合度、营销培训相关标签命中情况和现任岗位可迁移性。`;
+  rankReason.textContent = `当前排序为 ${ranked.map((person) => `${person.name}（${person.score}分）`).join(" > ")}。排序主要参考岗位匹配总分、岗位经历贴合度、硬性条件满足情况和现任岗位可迁移性。`;
 }
 
 function renderCompareFeedback(people) {
   compareFeedback.innerHTML = "";
+  if (activeCompareFeedbackId && !people.some((person) => person.id === activeCompareFeedbackId)) {
+    activeCompareFeedbackId = null;
+  }
   people.forEach((person) => {
     if (!compareReasons.has(person.id)) {
-      compareReasons.set(person.id, { preferred: false, reasons: new Set(), other: "" });
+      compareReasons.set(person.id, { reasons: new Set(), other: "" });
     }
     const state = compareReasons.get(person.id);
+    const isActive = activeCompareFeedbackId === person.id;
     const card = document.createElement("article");
     card.className = "person-feedback-card";
     card.innerHTML = `
@@ -1616,25 +1613,21 @@ function renderCompareFeedback(people) {
       <div class="feedback-detail hidden">
         <div class="reason-options"></div>
         <label class="other-label">其他</label>
-        <textarea class="other-reason" placeholder="请补充领导的具体判断，例如：更熟悉目标团队、长期负责同类项目、近期表现更突出等"></textarea>
+        <textarea class="other-reason" placeholder="${feedbackOtherPlaceholder}"></textarea>
       </div>
     `;
     const preferButton = card.querySelector(".prefer-button");
     const detail = card.querySelector(".feedback-detail");
     const options = card.querySelector(".reason-options");
     const textarea = card.querySelector("textarea");
-    preferButton.classList.toggle("selected", state.preferred);
-    preferButton.textContent = state.preferred ? "已选择：我认为他/她更合适" : "我认为他/她更合适";
-    detail.classList.toggle("hidden", !state.preferred);
+    preferButton.classList.toggle("selected", isActive);
+    preferButton.textContent = isActive ? "已选择：我认为他/她更合适" : "我认为他/她更合适";
+    detail.classList.toggle("hidden", !isActive);
     preferButton.addEventListener("click", () => {
-      state.preferred = !state.preferred;
-      if (!state.preferred) {
-        state.reasons.clear();
-        state.other = "";
-      }
+      activeCompareFeedbackId = isActive ? null : person.id;
       renderCompareFeedback(people);
     });
-    feedbackReasons.filter((reason) => reason !== "其他说明").forEach((reason) => {
+    feedbackReasons.forEach((reason) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "reason-chip";
@@ -1665,7 +1658,7 @@ function startCompareCalculation() {
   let remainingSeconds = 5;
   compareSelectedBtn.disabled = true;
   compareSelectedBtn.textContent = "分析中...";
-  calculationStatus.textContent = "正在调用岗位匹配模型，生成匹配分、优势短板和标签差异，请稍候...";
+  calculationStatus.textContent = "正在调用岗位匹配模型，生成匹配分、优势短板和排序依据，请稍候...";
   calculationStatus.classList.remove("hidden");
 
   calculationTimer = setInterval(() => {
@@ -1683,6 +1676,7 @@ function startCompareCalculation() {
     calculationStatus.classList.add("hidden");
     calculationTimeout = null;
     compareReasons.clear();
+    activeCompareFeedbackId = null;
     openComparePanel(people, true);
   }, 5000);
 }
@@ -1707,7 +1701,7 @@ renderDrawer();
 renderSampleRow();
 renderReasonOptions();
 
-    </script>
+</script>
   </body>
 </html>
 
