@@ -1611,9 +1611,7 @@ function renderCompareFeedback(people) {
     const card = document.createElement("article");
     card.className = "person-feedback-card";
     card.innerHTML = `
-      <h3>${person.name}的反馈</h3>
-      <p>与系统推荐人员相比，这个人为什么更合适？</p>
-      <button type="button" class="prefer-button">我认为他更合适</button>
+      <button type="button" class="prefer-button">我认为他/她更合适</button>
       <div class="feedback-detail hidden">
         <div class="reason-options"></div>
         <label class="other-label">其他</label>
@@ -1625,7 +1623,7 @@ function renderCompareFeedback(people) {
     const options = card.querySelector(".reason-options");
     const textarea = card.querySelector("textarea");
     preferButton.classList.toggle("selected", state.preferred);
-    preferButton.textContent = state.preferred ? "已选择：我认为他更合适" : "我认为他更合适";
+    preferButton.textContent = state.preferred ? "已选择：我认为他/她更合适" : "我认为他/她更合适";
     detail.classList.toggle("hidden", !state.preferred);
     preferButton.addEventListener("click", () => {
       state.preferred = !state.preferred;
